@@ -24,7 +24,7 @@ class Test: XCTestCase {
         let scrollView = UIScrollView()
         scrollView.addPullToRefresh {}
         let wavePullToRefreshViewFilter = { (view: UIView) -> Bool in
-            view.dynamicType == WavePullToRefreshView.self
+            type(of: view) == WavePullToRefreshView.self
         }
         let wavePullToRefreshView = scrollView.subviews.filter(wavePullToRefreshViewFilter).first as? WavePullToRefreshView
         
@@ -41,7 +41,7 @@ class Test: XCTestCase {
             scrollView.stopPullToRefresh()
         }
         let wavePullToRefreshViewFilter = { (view: UIView) -> Bool in
-            view.dynamicType == WavePullToRefreshView.self
+            type(of: view) == WavePullToRefreshView.self
         }
         let dropView = (scrollView.subviews.filter(wavePullToRefreshViewFilter).first
             as! WavePullToRefreshView).dropView
@@ -58,7 +58,7 @@ class Test: XCTestCase {
             scrollView.stopPullToRefresh()
         }
         let wavePullToRefreshViewFilter = { (view: UIView) -> Bool in
-            view.dynamicType == WavePullToRefreshView.self
+            type(of: view) == WavePullToRefreshView.self
         }
         let dropView = (scrollView.subviews.filter(wavePullToRefreshViewFilter).first
             as! WavePullToRefreshView).dropView

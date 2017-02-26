@@ -11,7 +11,7 @@ import Foundation
 public extension UIScrollView {
     
     // MARK:- Private Methods
-    private var pullToRefreshView: WavePullToRefreshView? {
+    fileprivate var pullToRefreshView: WavePullToRefreshView? {
         let pullToRefreshView = viewWithTag(WavePullToRefreshConst.tag)
         return pullToRefreshView as? WavePullToRefreshView
     }
@@ -23,15 +23,15 @@ public extension UIScrollView {
     - parameter 
         callback: Call when start refreshing
     */
-    public func addPullToRefresh(callback :(() -> ())) {
+    public func addPullToRefresh(_ callback :(() -> ())) {
         self.addPullToRefresh(options: WavePullToRefreshOption(), callback: callback)
     }
     
     /**
      with option
      */
-    public func addPullToRefresh(options options: WavePullToRefreshOption, callback :(() -> ())) {
-        let refreshViewFrame = CGRectMake(0, 0, self.frame.size.width, WavePullToRefreshConst.height)
+    public func addPullToRefresh(options: WavePullToRefreshOption, callback :(() -> ())) {
+        let refreshViewFrame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: WavePullToRefreshConst.height)
         let refreshView = WavePullToRefreshView(options: options, frame: refreshViewFrame, refreshCallback: callback)
         refreshView.tag = WavePullToRefreshConst.tag
         addSubview(refreshView)
@@ -41,13 +41,13 @@ public extension UIScrollView {
      Call when you want to start refreshing forcibly
      */
     public func startPullToRefresh() {
-        self.pullToRefreshView?.state = .Refreshing
+        self.pullToRefreshView?.state = .refreshing
     }
     
     /**
      Call when finish refreshing
      */
     public func stopPullToRefresh() {
-        self.pullToRefreshView?.state = .Normal
+        self.pullToRefreshView?.state = .normal
     }
 }

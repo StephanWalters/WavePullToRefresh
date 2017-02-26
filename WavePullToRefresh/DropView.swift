@@ -10,15 +10,15 @@ import UIKit
 
 class DropView: UIView{
     // MARK:- Properties
-    private let shapeLayer = CAShapeLayer()
+    fileprivate let shapeLayer = CAShapeLayer()
     var indicatorLayer: CAShapeLayer?
     var indicatorImageView: UIImageView?
-    private var angle: CGFloat = 0
+    fileprivate var angle: CGFloat = 0
     
     var animating = false {
         didSet {
             if !self.animating {
-                self.indicatorImageView?.transform = CGAffineTransformMakeRotation(0)
+                self.indicatorImageView?.transform = CGAffineTransform(rotationAngle: 0)
                 self.angle = 0
             }
         }
@@ -34,20 +34,20 @@ class DropView: UIView{
     }
 
     // MARK:- Internal Methods
-    func layoutSubviews(height: CGFloat, percent: CGFloat) {
+    func layoutSubviews(_ height: CGFloat, percent: CGFloat) {
         let radius = self.radius(height)
         guard let superview = self.superview else { return }
         
         // self
-        self.center = CGPointMake(superview.frame.size.width / 2, superview.frame.size.height)
-        self.bounds = CGRectMake(0, 0, radius, radius)
+        self.center = CGPoint(x: superview.frame.size.width / 2, y: superview.frame.size.height)
+        self.bounds = CGRect(x: 0, y: 0, width: radius, height: radius)
         self.shapeLayer.path = self.path(self.bounds(self.animating))
         
         // layout image view or indicator
         if let indicatorImageView = self.indicatorImageView {
             let width = self.bounds.width
             let height = self.bounds.height
-            indicatorImageView.frame = CGRectMake(width * 0.15, height * 0.15, width * 0.7, height * 0.7)
+            indicatorImageView.frame = CGRect(x: width * 0.15, y: height * 0.15, width: width * 0.7, height: height * 0.7)
             indicatorImageView.alpha = height / WavePullToRefreshConst.height
         } else if let indicatorLayer = self.indicatorLayer {
             indicatorLayer.lineWidth = 3.0 * (percent)
@@ -62,7 +62,7 @@ class DropView: UIView{
      - parameter 
         options: DropView's option
      */
-    func setOptions(options: WavePullToRefreshOption) {
+    func setOptions(_ options: WavePullToRefreshOption) {
         self.shapeLayer.fillColor = options.fillColor
         self.shapeLayer.actions = ["path" : NSNull(), "position" : NSNull(), "bounds" : NSNull()]
         self.layer.addSublayer(self.shapeLayer)
@@ -75,7 +75,7 @@ class DropView: UIView{
             self.indicatorLayer = CAShapeLayer()
             guard let indicatorLayer = self.indicatorLayer else { return }
             indicatorLayer.strokeColor = options.indicatorColor
-            indicatorLayer.fillColor = UIColor.clearColor().CGColor
+            indicatorLayer.fillColor = UIColor.clear.cgColor
             indicatorLayer.actions = ["path" : NSNull(), "position" : NSNull(), "bounds" : NSNull()]
             indicatorLayer.lineWidth = 0
             self.layer.addSublayer(indicatorLayer)
@@ -90,7 +90,7 @@ class DropView: UIView{
         self.shapeLayer.path = self.path(self.bounds(self.animating))
         self.angle += CGFloat(M_PI) * WavePullToRefreshConst.spinSpeed
         if let imageView = self.indicatorImageView {
-            imageView.transform = CGAffineTransformMakeRotation(self.angle)
+            imageView.transform = CGAffineTransform(rotationAngle: self.angle)
         } else if let indicatorLayer = self.indicatorLayer {
             indicatorLayer.lineWidth = 2.6 * (self.bounds(animating).size.width / WavePullToRefreshConst.maxIndicatorRadius)
             let radius = self.bounds(self.animating).size.width * 0.5
@@ -103,31 +103,31 @@ class DropView: UIView{
      - parameter 
         completion: callback to WavePullToRefreshView
      */
-    func stopAnimation(completion: ()->()) {
+    func stopAnimation(_ completion: @escaping ()->()) {
         self.layer.removeAllAnimations()
         
-        self.indicatorLayer?.hidden = true
-        self.indicatorImageView?.hidden = true
-        UIView.animateWithDuration(0.5, delay: 0,
-            usingSpringWithDamping: 1.0, initialSpringVelocity: 0.0, options: .CurveEaseIn,
+        self.indicatorLayer?.isHidden = true
+        self.indicatorImageView?.isHidden = true
+        UIView.animate(withDuration: 0.5, delay: 0,
+            usingSpringWithDamping: 1.0, initialSpringVelocity: 0.0, options: .curveEaseIn,
             animations: {
-                self.bounds.size = CGSizeZero
+                self.bounds.size = CGSize.zero
             },
             completion: { _ in
                 if let superview = self.superview as? WavePullToRefreshView {
                     completion()
                     self.center = CGPoint(x: superview.bounds.width/2, y: 0)
-                    self.indicatorLayer?.hidden = false
-                    self.indicatorImageView?.hidden = false
+                    self.indicatorLayer?.isHidden = false
+                    self.indicatorImageView?.isHidden = false
                 }
             }
         )
     }
 
     // MARK:- Private Methods
-    private func path(rect: CGRect) -> CGPath {
-        let path = UIBezierPath(ovalInRect: rect)
-        return path.CGPath
+    fileprivate func path(_ rect: CGRect) -> CGPath {
+        let path = UIBezierPath(ovalIn: rect)
+        return path.cgPath
     }
     
     /**
@@ -138,17 +138,17 @@ class DropView: UIView{
         percent: percentage of arc length( max: length of the circumference * 0.8 )
      - returns: path for indicator
      */
-    private func indicatorPath(angle: CGFloat, radius: CGFloat, percent: CGFloat) -> CGPath {
+    fileprivate func indicatorPath(_ angle: CGFloat, radius: CGFloat, percent: CGFloat) -> CGPath {
         let path = UIBezierPath()
-        path.addArcWithCenter(CGPointMake(radius, radius),
+        path.addArc(withCenter: CGPoint(x: radius, y: radius),
             radius: radius * 0.55,
             startAngle: angle,
             endAngle: (CGFloat(M_PI * 2) * min(percent, 1.0) * 0.8) + angle,
             clockwise: true)
-        return path.CGPath
+        return path.cgPath
     }
     
-    private func radius(height: CGFloat) -> CGFloat {
+    fileprivate func radius(_ height: CGFloat) -> CGFloat {
         return min(height, WavePullToRefreshConst.maxIndicatorRadius)
     }
     

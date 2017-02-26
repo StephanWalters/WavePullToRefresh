@@ -12,7 +12,7 @@ import WavePullToRefresh
 class ViewController: UIViewController {
     
     // MARK:- Properties
-    private var items = (0...10).map{ "test\($0)" }
+    fileprivate var items = (0...10).map{ "test\($0)" }
     
     @IBOutlet weak var tableView: UITableView?
     
@@ -20,21 +20,21 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationController?.navigationBar.translucent = false
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), forBarMetrics: .Default)
+        self.navigationController?.navigationBar.isTranslucent = false
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController?.navigationBar.shadowImage = UIImage()
         self.navigationController?.navigationBar.barTintColor = UIColor(red: 106/255, green: 172/255, blue: 184/255, alpha: 1)
         
         self.tableView?.dataSource = self
         
-        self.tableView!.registerClass(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        self.tableView!.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         
         let options = WavePullToRefreshOption()
-        options.fillColor = UIColor(red: 106/255, green: 172/255, blue: 184/255, alpha: 1).CGColor
+        options.fillColor = UIColor(red: 106/255, green: 172/255, blue: 184/255, alpha: 1).cgColor
         
         // add pull to refresh
         self.tableView!.addPullToRefresh(options: options) { [weak self] in
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(1.5 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
+            DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + Double(Int64(1.5 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: {
                 guard let s = self else { return }
                 s.items.shuffleInPlace()
                 s.tableView?.reloadData()
@@ -52,12 +52,12 @@ class ViewController: UIViewController {
 
 extension ViewController: UITableViewDataSource {
     // MARK:- Internal Methods
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return items.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
         
         if let textLabel = cell.textLabel {
             textLabel.text = "\(items[indexPath.row])"

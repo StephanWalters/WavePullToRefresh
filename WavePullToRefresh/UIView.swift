@@ -10,13 +10,13 @@ import Foundation
 
 public extension UIView {
     // MARK:- Internal Methods
-    func center(usePresentationLayer: Bool) -> CGPoint {
-        guard usePresentationLayer, let presentationLayer = layer.presentationLayer() as? CALayer
+    func center(_ usePresentationLayer: Bool) -> CGPoint {
+        guard usePresentationLayer, let presentationLayer = layer.presentation() as? CALayer
             else { return center}
         return presentationLayer.position
     }
-    func bounds(usePresentationLayer: Bool) -> CGRect {
-        guard usePresentationLayer, let presentationLayer = layer.presentationLayer() as? CALayer
+    func bounds(_ usePresentationLayer: Bool) -> CGRect {
+        guard usePresentationLayer, let presentationLayer = layer.presentation() as? CALayer
             else { return bounds}
         return presentationLayer.bounds
     }

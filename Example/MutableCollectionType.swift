@@ -8,7 +8,7 @@
 
 import Foundation
 
-public extension MutableCollectionType where Index == Int{
+public extension MutableCollection where Index == Int{
  
     // MARK:- Mutating Methods
     mutating func shuffleInPlace() {

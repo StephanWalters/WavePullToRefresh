@@ -17,16 +17,16 @@ struct WavePullToRefreshConst {
     static let maxIndicatorRadius: CGFloat = 50
 }
 
-public class WavePullToRefreshOption {
+open class WavePullToRefreshOption {
     // MARK:- Properties
     
-    public var animationStartOffsetY: CGFloat = 80
-    public var dropDuration: NSTimeInterval = 0.75
-    public var dropY: CGFloat = UIScreen.mainScreen().bounds.height * 0.85
+    open var animationStartOffsetY: CGFloat = 80
+    open var dropDuration: TimeInterval = 0.75
+    open var dropY: CGFloat = UIScreen.main.bounds.height * 0.85
     
-    public var fillColor = UIColor(red: 106/255, green: 172/255, blue: 184/255, alpha: 1).CGColor
-    public var indicatorColor = UIColor.whiteColor().CGColor
-    public var indicatorImageView: UIImageView?
+    open var fillColor = UIColor(red: 106/255, green: 172/255, blue: 184/255, alpha: 1).cgColor
+    open var indicatorColor = UIColor.white.cgColor
+    open var indicatorImageView: UIImageView?
     
     public init() {
         
